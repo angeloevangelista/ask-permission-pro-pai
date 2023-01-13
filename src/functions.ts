@@ -72,6 +72,18 @@ function getInformation(
 }
 
 function createChatCard(permissionRequest: PermissionRequest) {
+  const isUser = !/assumed-role/gi.test(permissionRequest.user);
+
+  const [userIfRole, userIfUsualUser] = permissionRequest.user
+    .split("/")
+    .slice(-2);
+
+  const awsConsoleUrl = (process.env as any)["AWS_CONSOLE_URL"];
+
+  const iamConsoleUrl = isUser
+    ? `${awsConsoleUrl}/iam/home#/users/${userIfUsualUser}`
+    : `${awsConsoleUrl}/iamv2/home#/roles/details/${userIfRole}`;
+
   const chatCard = {
     cardId: v4(),
     card: {
@@ -144,9 +156,7 @@ function createChatCard(permissionRequest: PermissionRequest) {
                     },
                     onClick: {
                       openLink: {
-                        url: `${
-                          (process.env as any)["AWS_CONSOLE_URL"]
-                        }/iamv2/home`,
+                        url: iamConsoleUrl,
                       },
                     },
                   },
