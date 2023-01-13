@@ -110,19 +110,19 @@ function createChatCard(permissionRequest: PermissionRequest) {
             },
             {
               decoratedText: {
-                topLabel: "user",
-                text: permissionRequest.user,
+                topLabel: "resource",
+                text: permissionRequest.resource,
                 startIcon: {
-                  iconUrl: `data:image/svg+xml;base64,${icons.user}`,
+                  iconUrl: `data:image/svg+xml;base64,${icons.package}`,
                 },
               },
             },
             {
               decoratedText: {
-                topLabel: "resource",
-                text: permissionRequest.resource,
+                topLabel: "user",
+                text: permissionRequest.user,
                 startIcon: {
-                  iconUrl: `data:image/svg+xml;base64,${icons.package}`,
+                  iconUrl: `data:image/svg+xml;base64,${icons.user}`,
                 },
               },
             },
