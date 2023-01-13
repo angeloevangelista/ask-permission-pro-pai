@@ -2,7 +2,7 @@ import axios from "axios";
 import cors from "cors";
 import express from "express";
 
-import { extractPermissionRequest } from "./functions";
+import { extractPermissionRequest, createChatCard } from "./functions";
 
 const PORT = process.env.PORT || 3333;
 const app = express();
@@ -16,10 +16,6 @@ app.get("/api/health", (_, response) =>
     message: "healthy",
     timestamp: new Date().toISOString(),
   })
-);
-
-app.post("/api/test", async (request, response) =>
-  response.json(extractPermissionRequest(request.body.data))
 );
 
 app.post("/api/aws-permission", async (request, response) => {
@@ -46,7 +42,27 @@ app.post("/api/aws-permission", async (request, response) => {
 
     console.log({ apiResponse });
   } catch (error) {
-    console.log({ error });
+    console.dir({ error }, { depth: null });
+  }
+
+  return response.status(201).send();
+});
+
+app.post("/api/v2/aws-permission", async (request, response) => {
+  try {
+    const permission = extractPermissionRequest(request.body.data);
+
+    if (!permission) {
+      return response.status(400).send();
+    }
+
+    const apiResponse = await axios.post((process.env as any)["WEBHOOK_URL"], {
+      cardsV2: [createChatCard(permission)],
+    });
+
+    console.log({ apiResponse });
+  } catch (error) {
+    console.dir({ error }, { depth: null });
   }
 
   return response.status(201).send();

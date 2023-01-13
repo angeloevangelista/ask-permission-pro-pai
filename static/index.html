@@ -41,7 +41,7 @@
         const textareaElement = document.querySelector("textarea");
         const textAreaValue = textareaElement.value;
 
-        await fetch("/api/aws-permission", {
+        await fetch("/api/v2/aws-permission", {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ data: textAreaValue }),
           method: "POST",
