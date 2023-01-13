@@ -86,8 +86,6 @@ function createChatCard(permissionRequest: PermissionRequest) {
       sections: [
         {
           header: "Permission info",
-          collapsible: true,
-          uncollapsibleWidgetsCount: 3,
           widgets: [
             {
               decoratedText: {
@@ -116,23 +114,21 @@ function createChatCard(permissionRequest: PermissionRequest) {
                 },
               },
             },
+          ],
+        },
+        {
+          header: "Raw error",
+          collapsible: true,
+          uncollapsibleWidgetsCount: 1,
+          widgets: [
             {
-              decoratedText: {
-                text: "\n",
-              },
-            },
-            {
-              decoratedText: {
-                topLabel: "raw error",
+              textParagraph: {
                 text: permissionRequest.rawError,
-                startIcon: {
-                  iconUrl: `data:image/svg+xml;base64,${icons.alertTriangle}`,
-                },
               },
             },
             {
-              decoratedText: {
-                text: "\n",
+              textParagraph: {
+                text: `\n`,
               },
             },
             {
