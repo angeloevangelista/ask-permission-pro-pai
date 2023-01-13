@@ -130,8 +130,8 @@ function createChatCard(permissionRequest: PermissionRequest) {
         },
         {
           header: "Raw error",
-          collapsible: true,
-          uncollapsibleWidgetsCount: 1,
+          collapsible: false,
+          uncollapsibleWidgetsCount: 0,
           widgets: [
             {
               textParagraph: {
