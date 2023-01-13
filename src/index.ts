@@ -2,6 +2,8 @@ import axios from "axios";
 import cors from "cors";
 import express from "express";
 
+import { extractPermissionRequest } from "./functions";
+
 const PORT = process.env.PORT || 3333;
 const app = express();
 
@@ -49,67 +51,6 @@ app.post("/api/aws-permission", async (request, response) => {
 
   return response.status(201).send();
 });
-
-interface PermissionRequest {
-  user: string;
-  permission: string;
-  resource: string;
-  rawError: string;
-}
-
-function extractPermissionRequest(
-  permissionError: string
-): PermissionRequest | undefined {
-  if (!permissionError?.trim()) {
-    return;
-  }
-
-  permissionError = permissionError.replace(/\n/gi, "").trim();
-
-  console.log(
-    permissionError.substring(permissionError.indexOf("perform: ") + 9)
-  );
-
-  const hasUser = /User: /gi.test(permissionError);
-
-  const user = hasUser
-    ? permissionError.substring(
-        permissionError.indexOf("User: ") + 6,
-        permissionError.indexOf("is not authorized") - 1
-      )
-    : "---";
-
-  const hasPermission = /perform: /gi.test(permissionError);
-
-  const permission = hasPermission
-    ? permissionError.substring(
-        permissionError.indexOf("perform: ") + 9,
-        permissionError.indexOf("perform: ") +
-          9 +
-          permissionError
-            .substring(permissionError.indexOf("perform: ") + 9)
-            .indexOf(" ")
-      )
-    : "---";
-
-  const hasResource = /on resource/gi.test(permissionError);
-
-  const resource = hasResource
-    ? permissionError.substring(
-        permissionError.indexOf("on resource: ") + 13,
-        permissionError.indexOf("because no identity-based") - 1
-      )
-    : "---";
-
-  const permissionRequest: PermissionRequest = {
-    user,
-    permission,
-    resource,
-    rawError: permissionError,
-  };
-
-  return permissionRequest;
-}
 
 app.listen(PORT, () =>
   console.log(`server is listening on http://127.0.0.1:${PORT}`)
